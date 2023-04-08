@@ -5,9 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start:dev": "SET NODE_ENV=development & nodemon server.js",
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "debug": "ndb server.js"
-    
   },
   "author": "chandan",
   "license": "ISC",
@@ -34,10 +33,10 @@
     "ndb": "^1.1.5",
     "nodemailer": "^6.7.8",
     "nodemon": "^2.0.21",
-  
     "pug": "^3.0.2",
     "sharp": "^0.31.0",
     "slugify": "^1.6.5",
+    "socket.io": "^4.6.1",
     "stripe": "^10.11.0",
     "validator": "^13.7.0",
     "xss-clean": "^0.1.1"

@@ -8,7 +8,6 @@ router
   .get(authController.protect, reviewController.getAllReviews)
   .post(
     authController.protect,
-
     authController.restrictTo('user', 'admin'),
     reviewController.setTourUserIds,
     reviewController.createReviews

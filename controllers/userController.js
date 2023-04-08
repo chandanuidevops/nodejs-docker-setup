@@ -30,15 +30,15 @@ const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
 exports.uploadUserPhoto = upload.single('photo');
 
-exports.resizeUserPhoto =async (req, res, next) => {
-  if (!req.file)return next();
-  req.file.filename =`user-${req.user.id}-${Date.now()}.jpeg`
+exports.resizeUserPhoto = async (req, res, next) => {
+  if (!req.file) return next();
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
   await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`)
-    next()
+    .toFile(`public/img/users/${req.file.filename}`);
+  next();
 };
 
 const filterObj = (obj, ...allowedFields) => {
@@ -86,7 +86,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // create error if user posts password data
- 
+
   if (req.body.password || req.body.passwordConfirm) {
     return next(new AppError('THis route is not for update password', 400));
   }
@@ -105,14 +105,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
-
-
-
-
-
-
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
   res.status(200).json({
@@ -124,6 +116,40 @@ exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
+
+exports.setAvatar = catchAsync(async (req, res, next) => {
+  console.log(req.body)
+  const userId = req.params.id;
+  const avatarImage = req.body.image;
+  const userData = await User.findByIdAndUpdate(
+    userId,
+    {
+      isAvatarImageSet: true,
+      photo: avatarImage,
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: 'success',
+    data: userData,
+  });
+});
+
+
+exports.getAllUsers = catchAsync(async(req,res,next)=>{
+  const users = await User.find({ _id: { $ne: req.params.id } }).select([
+    "email",
+    "name",
+    "username",
+    "photo",
+    "_id",
+  ]);
+  res.status(200).json({
+    status: 'success',
+   data:users
+  });
+})
+
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
 exports.getUser = factory.getOne(User);

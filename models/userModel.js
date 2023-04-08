@@ -10,6 +10,13 @@ const userSchema = new mongoose.Schema({
     maxlength: [40, ' Name should be less than 40 characters'],
     minlength: [3, ' Name should be more than 2 characters'],
   },
+  username: {
+    type: String,
+    default:null,
+    trim: true,
+    maxlength: [40, ' Name should be less than 40 characters'],
+    minlength: [3, ' Name should be more than 2 characters'],
+  },
   email: {
     type: String,
     required: [true, 'Email field is required'],
@@ -23,6 +30,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['user', 'guide', 'lead-guide', 'admin'],
     default: 'user',
+  },
+  isAvatarImageSet: {
+    type: Boolean,
+    default: false,
   },
   password: {
     type: String,
